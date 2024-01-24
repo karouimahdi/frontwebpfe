@@ -74,41 +74,9 @@ const [prenError, setPrenError] = useState("");
   };
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
-    const phoneRegex = /^[0-9]{8,14}$/;
-    if (!phoneRegex.test(phone)) {
-      setPhoneError("La longueur doit être entre 8 et 14");
-    } else {
-      setPhoneError(""); // Reset phone error if valid
-    }
-  
-    const cinRegex = /^[0-9]{8,12}$/;
-    if (!cinRegex.test(cnicNo)) {
-      setCinError("La longueur doit être entre 8 et 12");
-    } else {
-      setCinError(""); // Reset CIN error if valid
-    }
-    const nameRegex = /^[a-zA-Z\s]+$/;
-    if (!nameRegex.test(Nom)) {
-      setNomError("Le nom ne doit contenir que des lettres et des espaces.");
-    } else {
-      setNomError(""); // Reset CIN error if valid
-    }
+    console.log("handleSubmit function is called");
 
-   
-    const prenomRegex = /^[a-zA-Z\s]+$/;
-    if (!prenomRegex.test(Prenom)) {
-  setPrenError("Le Prenom ne doit contenir que des lettres et des espaces.")
-     
-    }else {
-setPrenError("")
-    }
-  
-    // Check if either phone or CIN has an error message
-    if (phoneError || cinError || prenomRegex || nameRegex ) {
-      return;
-    }
-  
+    
     const data = new FormData();
     data.append("photo", photoAvatar[0]);
     data.append("cin", photoCin[0]);
@@ -121,7 +89,7 @@ setPrenError("")
     try {
       // Handle validations
       const response = await axios.post(
-        "https://adminpfe.adaptable.app/Chauff/AjoutChauf",
+        "http://localhost:3005/Chauff/AjoutChauf",
         {
           Nom,
           Prenom,

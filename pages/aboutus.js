@@ -1,3 +1,7 @@
+
+
+
+
 import Image from "next/legacy/image";
 import Image1 from "../public/image_01-6.jpg";
 import Image2 from "../public/image_06.jpg";
