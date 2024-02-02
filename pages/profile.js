@@ -7,7 +7,7 @@ import React, { useState, useEffect } from 'react';
 import axios from "axios";
 import ContactPageIcon from '@mui/icons-material/ContactPage';
 
-
+import { Buffer } from 'buffer';
 
 const TaxiUser = () => {
 
@@ -19,6 +19,7 @@ const TaxiUser = () => {
   const [address, setAddress] = useState(null);
   const [id, setId] = useState(null);
   const [user , setUser] = useState()
+
   // console.log("qsddq",id)
   useEffect(() => {
     const localStorageAvailable = typeof window !== 'undefined' && window.localStorage;
@@ -41,13 +42,14 @@ const TaxiUser = () => {
   }, [id]);
 
   const getSingleUser = async (id)  => {
-      const response = await axios.get(` https://backendweb-pfe.vercel.app/Chauff/searchchauf/${id}`);
+      const response = await axios.get(` http://localhost:3005/Chauff/searchchauf/${id}`);
       if(response.status===200){
         setUser({ ...response.data })
-    //  console.log("data" , response.data)
+     console.log("data" , response.data)
       }
     }
-    
+
+    const base64Photo = user ? Buffer.from(user.photoAvatar.data).toString('base64') : null;
 
   return (
    <div>
@@ -61,12 +63,12 @@ const TaxiUser = () => {
             
   <img
     className="h-32 w-32 rounded-full border-4 border-white mx-auto my-4"
-    src={user && user.photoAvatar}
+    src={`data:image/png;base64,${base64Photo}`}
+    
     alt=""
     width={100}
     height={100}
   />
-  
 
                 <div className="py-2">
                     <h3 className="font-bold text-2xl mb-1">{user && user.Nom} {user && user.Prenom}</h3>

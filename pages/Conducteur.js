@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import Select from 'react-select';
 import axios from "axios";
+import { useRouter } from "next/router";
 
 const Conducteur = () => {
   const [submitStatus, setSubmitStatus] = useState("");
@@ -10,11 +11,11 @@ const Conducteur = () => {
   const [Prenom, setPrenom] = useState()
   const [email, setemail] = useState()
   const [phone, setphone] = useState()
-  const [photoAvatar, setphotoAvatar] = useState({file :[]})
-  const [photoPermisRec, setphotoPermisRec] = useState({file :[]})
-  const [photoPermisVer, setphotoPermisVer] = useState({file :[]})
-  const [photoVtc, setphotoVtc] = useState({file :[]})
-  const [photoCin, setphotoCin] = useState({file :[]})
+  const [photoAvatar, setphotoAvatar] = useState({file :[{}]})
+  const [photoPermisRec, setphotoPermisRec] = useState({file :[{}]})
+  const [photoPermisVer, setphotoPermisVer] = useState({file :[{}]})
+  const [photoVtc, setphotoVtc] = useState({file :[{}]})
+  const [photoCin, setphotoCin] = useState({file :[{}]})
 
   const [gender, setgender] = useState()
   const [DateNaissance, setDateNaissance] = useState()
@@ -29,6 +30,7 @@ const [cinError, setCinError] = useState("");
 const [nomError, setNomError] = useState("");
 const [prenError, setPrenError] = useState("");
 
+const [phoneCode, setPhoneCode] = useState("");
 
     const [Message, setMessage] = useState()
 
@@ -38,7 +40,7 @@ const [prenError, setPrenError] = useState("");
 
   const [countries, setCountries] = useState([]);
   const [selectedCountry, setSelectedCountry] = useState(null);
-
+const router =useRouter();
   useEffect(() => {
     fetch('https://restcountries.com/v3.1/all')
       .then(response => response.json())
@@ -75,45 +77,37 @@ const [prenError, setPrenError] = useState("");
   const handleSubmit = async (e) => {
     e.preventDefault();
     console.log("handleSubmit function is called");
+    const fullPhoneNumber = `${phoneCode}${phone}`;
 
     
-    const data = new FormData();
-    data.append("photo", photoAvatar[0]);
-    data.append("cin", photoCin[0]);
-    data.append("permisrec", photoPermisRec[0]);
-    data.append("permisver", photoPermisVer[0]);
-    data.append("vtc", photoVtc[0]);
-  
-    console.log("fileeeeee", data);
-  
-    try {
-      // Handle validations
-      const response = await axios.post(
-        " https://backendweb-pfe.vercel.app/Chauff/AjoutChauf",
-        {
-          Nom,
-          Prenom,
-          email,
-          phone,
-          photoAvatar,
-          photoCin,
-          photoPermisRec,
-          photoPermisVer,
-          photoVtc,
-          gender,
-          DateNaissance,
-          Nationalite,
-          cnicNo,
-          address,
-          postalCode,
+     const data = new FormData();
+  data.append("photoAvatar", photoAvatar?.file[0]);
+  data.append("photoCin", photoCin?.file[0]);
+  data.append("photoPermisRec", photoPermisRec?.file[0]);
+  data.append("photoPermisVer", photoPermisVer?.file[0]);
+  data.append("photoVtc", photoVtc?.file[0]);
+  data.append("Nom", Nom);
+  data.append("Prenom", Prenom);
+  data.append("email", email);
+  data.append("phone", fullPhoneNumber);
+  data.append("gender", gender);
+  data.append("DateNaissance", DateNaissance);
+  data.append("Nationalite", Nationalite);
+  data.append("cnicNo", cnicNo);
+  data.append("address", address);
+  data.append("postalCode", postalCode);
+
+  try {
+    // Handle validations
+    const response = await axios.post(
+      " http://localhost:3005/Chauff/AjoutChauf",
+      data,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
         },
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      );
-  
+      }
+    );
       const newUser = response.data.uses;
       console.log("res1000", newUser);
       console.log("fileeee*//**e", photoAvatar);
@@ -138,6 +132,8 @@ const [prenError, setPrenError] = useState("");
       setTimeout(() => {
         setSubmitStatus("");
       }, 10000);
+      router.push("/");
+
     } catch (err) {
       console.warn(err);
       if (err.response) {
@@ -158,6 +154,10 @@ const [prenError, setPrenError] = useState("");
         }
       }
     }
+  };
+  const handleFileInputChange = (setState, e) => {
+    const file = e.target.files[0];
+    setState((prevState) => ({ ...prevState, file: [file] }));
   };
   
 
@@ -247,21 +247,35 @@ const [prenError, setPrenError] = useState("");
             </div>
 
             <div className="col-span-1 row-span-1 p-4 px-8 border">
-              <label  className="block mb-2  text-gray-900 ">
-                N° Téléphone : 
-              </label>
-              <input
-                type="text"
-                id="cin"
-                className="  text-gray-900  block w-full p-2.5 "
-                placeholder="012345678"
-                onChange={e => setphone(e.target.value)}
-                value={phone || ""}
-                required
-              />
-              {phoneError && <label className="text-red-500">{phoneError}</label>}
-            </div>
-
+  <label className="block mb-2 text-gray-900">
+    N° Téléphone :
+  </label>
+  <div className="flex items-center">
+    <select
+      id="phoneCode"
+      className="block w-16 p-2.5 border-gray-300 rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 mr-2"
+      onChange={e => setPhoneCode(e.target.value)}
+      value={phoneCode || ""}
+      required
+    >
+      <option value="">Choisir le code</option>
+      <option value="+212">+212</option>
+      <option value="+213">+213</option>
+      <option value="+216">+216</option>
+      {/* Ajoutez d'autres options pour d'autres codes de téléphone */}
+    </select>
+    <input
+      type="text"
+      id="phone"
+      className="text-gray-900 block w-full p-2.5"
+      placeholder="012345678"
+      onChange={e => setphone(e.target.value)}
+      value={phone || ""}
+      required
+    />
+  </div>
+  {phoneError && <label className="text-red-500">{phoneError}</label>}
+</div>
             
             <div className="col-span-1 row-span-1 p-4 px-8 border">
           <label className="block mb-2 text-gray-900">Genre</label>
@@ -292,20 +306,7 @@ const [prenError, setPrenError] = useState("");
   />
 </div>
 
-            <div className="col-span-1 row-span-1 p-4 px-8 border">
-          <label className="block mb-2 text-gray-900">Nationalité</label>
-          <select
-            id="nationalite"
-            className="text-gray-900 block w-full p-2.5"
-            onChange={e => setNationalite(e.target.value)} value={Nationalite || ""}
-            required
-          >
-            <option value="">Sélectionner</option>
-            <option value="Tunisian">Tunisian</option>
-            <option value="Marocain">Marocain</option>
-            <option value="Francais">Francais</option>
-          </select>
-        </div>
+           
         <div className="col-span-1 row-span-1 p-4 px-8 border">
               <label  className="block mb-2  text-gray-900 ">
                 Adresse
@@ -344,7 +345,7 @@ const [prenError, setPrenError] = useState("");
                 type="file"
                 id="avatar"
                 className="text-gray-900  block w-full p-2.5 "
-                onChange={e => setphotoAvatar(e.target.files[0])}
+                onChange={(e) => handleFileInputChange(setphotoAvatar, e)}
                 required
               />
             </div>
@@ -357,7 +358,7 @@ const [prenError, setPrenError] = useState("");
                 type="file"
                 id="permis_verso"
                 className="text-gray-900  block w-full p-2.5 "
-                onChange={e => setphotoPermisVer(e.target.files[0])}
+                onChange={(e) => handleFileInputChange(setphotoPermisVer, e)}
                 required
               />
             </div>
@@ -369,8 +370,8 @@ const [prenError, setPrenError] = useState("");
                 type="file"
                 id="photo_cin"
                 className="text-gray-900  block w-full p-2.5 "
-                onChange={e => setphotoCin(e.target.files[0])}
-                required
+                onChange={(e) => handleFileInputChange(setphotoCin, e)}
+                required 
               />
             </div>
             <div className="col-span-1 row-span-1  p-4 px-8 border">
@@ -381,8 +382,8 @@ const [prenError, setPrenError] = useState("");
                 type="file"
                 id="photo_VTC"
                 className="text-gray-900  block w-full p-2.5 "
-                onChange={e => setphotoVtc(e.target.files[0])}
-                required
+                onChange={(e) => handleFileInputChange(setphotoVtc, e)}
+                required 
               />
             </div>
             <div className="col-span-1 row-span-1  p-4 px-8 border">
@@ -393,8 +394,8 @@ const [prenError, setPrenError] = useState("");
                 type="file"
                 id="permis_recto"
                 className="text-gray-900  block w-full p-2.5 "
-                onChange={e => setphotoPermisRec(e.target.files[0])}
-                required
+                onChange={(e) => handleFileInputChange(setphotoPermisRec, e)}
+                required 
               />
             </div>
             
@@ -413,6 +414,7 @@ const [prenError, setPrenError] = useState("");
        
       </div>
       {/* End of Content */}
+
     </div>
   );
 };
