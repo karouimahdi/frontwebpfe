@@ -42,7 +42,7 @@ const [passError, setPassError] = useState("");
     }, [id]);
 
     const getSingleUser = async (id)  => {
-        const response = await axios.get(` http://localhost:3005/Chauff/searchchauf/${id}`);
+        const response = await axios.get(` https://backendweb-pfe.vercel.app/Chauff/searchchauf/${id}`);
         if(response.status===200){
        setform({ ...response.data })
       //  console.log("data" , response.data)
@@ -92,7 +92,7 @@ const [passError, setPassError] = useState("");
     
         // Handle validations
         axios
-          .put(` http://localhost:3005/Chauff/updatechauf/${id}`,data
+          .put(` https://backendweb-pfe.vercel.app/Chauff/updatechauf/${id}`,data
           ,{ headers: {
             'Content-Type': 'multipart/form-data',
           },})
@@ -153,7 +153,7 @@ const [passError, setPassError] = useState("");
             newPassword: forme.newPassword,
           };
         
-          axios.put(` http://localhost:3005/Chauff/pass/${id}`, data)
+          axios.put(` https://backendweb-pfe.vercel.app/Chauff/pass/${id}`, data)
             .then(response => {
               // Handle successful response
               // For example, navigate to a new page
@@ -183,7 +183,7 @@ const [passError, setPassError] = useState("");
       
           // Handle validations
           axios
-            .put(` http://localhost:3005/Chauff/updatestatus/${id}`
+            .put(` https://backendweb-pfe.vercel.app/Chauff/updatestatus/${id}`
             ,{ headers: {
               'Content-Type': 'multipart/form-data',
             },})
