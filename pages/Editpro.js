@@ -42,12 +42,13 @@ const [passError, setPassError] = useState("");
     }, [id]);
 
     const getSingleUser = async (id)  => {
-        const response = await axios.get(` https://backendweb-pfe.vercel.app/Chauff/searchchauf/${id}`);
+        const response = await axios.get(`http://localhost:3005/Chauff/searchchauf/${id}`);
         if(response.status===200){
        setform({ ...response.data })
       //  console.log("data" , response.data)
         }
       }
+      const base64Photo = form && form.photoAvatar ? Buffer.from(form.photoAvatar.data).toString('base64') : null;
 
       const onChangeHandler = (e)=>{
         setform({
@@ -92,7 +93,7 @@ const [passError, setPassError] = useState("");
     
         // Handle validations
         axios
-          .put(` https://backendweb-pfe.vercel.app/Chauff/updatechauf/${id}`,data
+          .put(`http://localhost:3005/Chauff/updatechauf/${id}`,data
           ,{ headers: {
             'Content-Type': 'multipart/form-data',
           },})
@@ -153,7 +154,7 @@ const [passError, setPassError] = useState("");
             newPassword: forme.newPassword,
           };
         
-          axios.put(` https://backendweb-pfe.vercel.app/Chauff/pass/${id}`, data)
+          axios.put(`http://localhost:3005/Chauff/pass/${id}`, data)
             .then(response => {
               // Handle successful response
               // For example, navigate to a new page
@@ -183,7 +184,7 @@ const [passError, setPassError] = useState("");
       
           // Handle validations
           axios
-            .put(` https://backendweb-pfe.vercel.app/Chauff/updatestatus/${id}`
+            .put(`http://localhost:3005/Chauff/updatestatus/${id}`
             ,{ headers: {
               'Content-Type': 'multipart/form-data',
             },})
@@ -220,7 +221,7 @@ const [passError, setPassError] = useState("");
        <div className="wrappere bg-white mt-sm-5">
     <h4 className="pb-4 border-bottom">Paramètres du compte</h4>
     <div className="d-flex align-items-start py-3 border-bottom">
-        <img   src={form.photoAvatar || ""}
+        <img   s src={`data:image/png;base64,${base64Photo}`}
             className="img" alt="" />
         <div className="pl-sm-4 pl-2" id="img-section">
             <b>Photo Profile </b>
