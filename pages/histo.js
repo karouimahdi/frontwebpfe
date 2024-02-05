@@ -28,7 +28,7 @@ useEffect(() => {
 
 const getSingleUser = async (id) => {
     try {
-      const response = await axios.get(` http://localhost:3005/hist/history/${id}`);
+      const response = await axios.get(` backendweb-pfe.vercel.app/hist/history/${id}`);
       if (response.status === 200) {
         setUser(response.data);
         console.log('API response data:', response.data);
