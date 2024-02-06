@@ -42,7 +42,7 @@ const [passError, setPassError] = useState("");
     }, [id]);
 
     const getSingleUser = async (id)  => {
-        const response = await axios.get(`http://45.9.188.225:3005/Chauff/searchchauf/${id}`);
+        const response = await axios.get(`https://45.9.188.225:3005/Chauff/searchchauf/${id}`);
         if(response.status===200){
        setform({ ...response.data })
       //  console.log("data" , response.data)
@@ -93,7 +93,7 @@ const [passError, setPassError] = useState("");
     
         // Handle validations
         axios
-          .put(`http://45.9.188.225:3005/Chauff/updatechauf/${id}`,data
+          .put(`https://45.9.188.225:3005/Chauff/updatechauf/${id}`,data
           ,{ headers: {
             'Content-Type': 'multipart/form-data',
           },})
@@ -154,7 +154,7 @@ const [passError, setPassError] = useState("");
             newPassword: forme.newPassword,
           };
         
-          axios.put(`http://45.9.188.225:3005/Chauff/pass/${id}`, data)
+          axios.put(`https://45.9.188.225:3005/Chauff/pass/${id}`, data)
             .then(response => {
               // Handle successful response
               // For example, navigate to a new page
@@ -184,7 +184,7 @@ const [passError, setPassError] = useState("");
       
           // Handle validations
           axios
-            .put(`http://45.9.188.225:3005/Chauff/updatestatus/${id}`
+            .put(`https://45.9.188.225:3005/Chauff/updatestatus/${id}`
             ,{ headers: {
               'Content-Type': 'multipart/form-data',
             },})

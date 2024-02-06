@@ -100,7 +100,7 @@ const router =useRouter();
   try {
     // Handle validations
     const response = await axios.post(
-      " http://45.9.188.225:3005/Chauff/AjoutChauf",
+      " https://45.9.188.225:3005/Chauff/AjoutChauf",
       data,
       {
         headers: {
