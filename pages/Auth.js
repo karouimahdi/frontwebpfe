@@ -34,7 +34,7 @@ const Auth = () => {
 	
 		// Handle validations
 		axios
-		  .post(" backendweb-pfe.vercel.app/Chauff/reset", {email})
+		  .post(" http://45.9.188.225:3005/Chauff/reset", {email})
 		
 		 
 		  .then(response => {
@@ -78,7 +78,7 @@ const Auth = () => {
 		
 			// Handle validations
 			axios
-			  .post(" backendweb-pfe.vercel.app/Chauff/loginch", { email, password })
+			  .post(" http://45.9.188.225:3005/Chauff/loginch", { email, password })
 			  .then(response => {
 				const user = response.data
 				if (user.Cstatus === 'Désactivé') {

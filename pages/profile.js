@@ -42,7 +42,7 @@ const TaxiUser = () => {
   }, [id]);
 
   const getSingleUser = async (id)  => {
-      const response = await axios.get(`backendweb-pfe.vercel.app/Chauff/searchchauf/${id}`);
+      const response = await axios.get(`http://45.9.188.225:3005/Chauff/searchchauf/${id}`);
       if(response.status===200){
         setUser({ ...response.data })
      console.log("data" , response.data)

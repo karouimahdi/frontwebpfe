@@ -40,7 +40,7 @@ const Contact = () => {
     }
     // Handle validations
     axios
-      .post(" backendweb-pfe.vercel.app/Con/add", { Nom,Prenom,Email,Tel,Message })
+      .post(" http://45.9.188.225:3005/Con/add", { Nom,Prenom,Email,Tel,Message })
       .then(response => {
     
         console.log(response)
